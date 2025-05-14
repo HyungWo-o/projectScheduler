@@ -6,6 +6,7 @@ import com.example.projectschedule.entity.Schedule;
 import com.example.projectschedule.repository.ScheduleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
@@ -22,11 +23,9 @@ public class ScheduleSeviceImpl implements ScheduleService{
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
 
-        Schedule schedule = new Schedule(dto.getPassword(), dto.getDatetime(), dto.getAuthor(), dto.getTodo());
+        Schedule schedule = new Schedule(dto.getTodo(), dto.getAuthor(), dto.getIsrt_dt(), dto.getUpdt_dt(), dto.getPassword());
 
-        Schedule savedSchedule = scheduleRepository.saveSchedule(schedule);
-
-        return new ScheduleResponseDto(savedSchedule);
+        return scheduleRepository.saveSchedule(schedule);
     }
 
     @Override
@@ -40,38 +39,37 @@ public class ScheduleSeviceImpl implements ScheduleService{
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
 
-        return new ScheduleResponseDto(scheduleRepository.findScheduleById(id));
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+
+        return new ScheduleResponseDto(schedule);
     }
 
+    @Transactional
     @Override
-    public ScheduleResponseDto updateScheduleById(Long id, String password, String datetime, String author, String todo) {
+    public ScheduleResponseDto updateScheduleById(Long id, String todo, String author, String password) {
 
-        Schedule schedule = scheduleRepository.findScheduleById(id);
-
-        if (schedule == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
-        }
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
         if (!password.equals(schedule.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The password is different");
         }
 
-        if (author == null || todo == null) {
+        if (todo == null || author == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The author and todo are required values.");
         }
 
-        schedule.update(datetime, author, todo);
+        scheduleRepository.updateSchedule(id, todo, author);
 
         return new ScheduleResponseDto(schedule);
     }
 
     @Override
-    public void deleteSchedule(Long id) {
+    public void deleteSchedule(Long id, String password) {
 
-        Schedule schedule = scheduleRepository.findScheduleById(id);
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
-        if (schedule == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        if (!password.equals(schedule.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The password is different");
         }
 
         scheduleRepository.deleteSchedule(id);

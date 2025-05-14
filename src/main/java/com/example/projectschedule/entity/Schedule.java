@@ -1,33 +1,32 @@
 package com.example.projectschedule.entity;
 
-import com.example.projectschedule.dto.ScheduleRequestDto;
-import com.example.projectschedule.dto.ScheduleResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
 public class Schedule {
 
-    @Setter
+//    @Setter
     private Long id;
-    private String password;
-    private String datetime;
-    private String author;
     private String todo;
+    private String author;
+    private String isrt_dt;
+    private String updt_dt;
+    private String password;
 
-    public Schedule(String password, String datetime, String author, String todo) {
-        this.password = password;
-        this.datetime = datetime;
-        this.author = author;
+    public Schedule(String todo, String author, String isrt_dt, String updt_dt, String password) {
         this.todo = todo;
+        this.author = author;
+        this.isrt_dt = isrt_dt;
+        this.updt_dt = updt_dt;
+        this.password = password;
     }
 
-    public void update(String datetime, String author, String todo) {
-        this.datetime = datetime;
-        this.author = author;
+    public void update(String todo, String author, String updt_dt ) {
         this.todo = todo;
+        this.author = author;
+        this.updt_dt = updt_dt;
     }
 
 }
