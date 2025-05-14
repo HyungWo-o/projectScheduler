@@ -23,7 +23,7 @@ public class ScheduleSeviceImpl implements ScheduleService{
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
 
-        Schedule schedule = new Schedule(dto.getTodo(), dto.getAuthor(), dto.getIsrt_dt(), dto.getUpdt_dt(), dto.getPassword());
+        Schedule schedule = new Schedule(dto.getTodo(), dto.getAuthor(), dto.getPassword());
 
         return scheduleRepository.saveSchedule(schedule);
     }

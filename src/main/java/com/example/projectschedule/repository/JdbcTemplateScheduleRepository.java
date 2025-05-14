@@ -43,7 +43,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         // 저장 후 생성된 key값을 Number 타입으로 반환하는 메서드
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return new ScheduleResponseDto(key.longValue(), schedule.getTodo(), schedule.getAuthor(), schedule.getIsrt_dt(), schedule.getUpdt_dt());
+        return new ScheduleResponseDto(key.longValue(), schedule.getTodo(), schedule.getAuthor(), now, now);
     }
 
     @Override
@@ -91,8 +91,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
                 rs.getString("todo"),
                 rs.getString("author"),
                 rs.getString("isrt_dt"),
-                rs.getString("updt_dt"),
-                rs.getString("password")
+                rs.getString("updt_dt")
         );
     }
 
@@ -103,8 +102,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
                 rs.getString("todo"),
                 rs.getString("author"),
                 rs.getString("isrt_dt"),
-                rs.getString("updt_dt"),
-                rs.getString("password")
+                rs.getString("updt_dt")
         );
     }
 }

@@ -15,12 +15,18 @@ public class Schedule {
     private String updt_dt;
     private String password;
 
-    public Schedule(String todo, String author, String isrt_dt, String updt_dt, String password) {
+    public Schedule(String todo, String author, String password) {
+        this.todo = todo;
+        this.author = author;
+        this.password = password;
+    }
+
+    public Schedule(Long id, String todo, String author, String isrt_dt, String updt_dt) {
+        this.id = id;
         this.todo = todo;
         this.author = author;
         this.isrt_dt = isrt_dt;
         this.updt_dt = updt_dt;
-        this.password = password;
     }
 
     public void update(String todo, String author, String updt_dt ) {
